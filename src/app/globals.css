@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #1a0d2e;
+  --color-bg-soft: #2a1845;
+  --color-magenta: #c4307f;
+  --color-purple: #7b1fa2;
+  --color-gold: #fbbf24;
+  --color-text: #f5f5f0;
+  --color-text-soft: #c9b8d9;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  overscroll-behavior-y: contain;
+}
+
+body {
+  background: radial-gradient(ellipse at top, #2a1845 0%, #1a0d2e 50%, #0d061a 100%);
+  min-height: 100dvh;
+}
+
+.brand-gradient {
+  background: linear-gradient(135deg, #ef2e5b 0%, #c4307f 40%, #7b1fa2 80%, #4a148c 100%);
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #ef2e5b 0%, #c4307f 40%, #7b1fa2 80%, #4a148c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input {
+  font-family: inherit;
+}
