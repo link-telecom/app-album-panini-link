@@ -98,23 +98,38 @@ export async function registerUser(input: RegisterInput): Promise<User> {
     user = cred.user;
   } catch (err: unknown) {
     const code = (err as { code?: string })?.code;
+    const message = (err as { message?: string })?.message ?? "";
+    console.error("[auth.register] createUser error", code, message, err);
     if (code === "auth/email-already-in-use") {
       throw new AuthError("username_taken", "Ese nombre de usuario ya está tomado");
     }
-    throw new AuthError("unknown", "No se pudo crear la cuenta. Intenta de nuevo.");
+    throw new AuthError(
+      "unknown",
+      `No se pudo crear la cuenta. (${code ?? "desconocido"})`
+    );
   }
 
-  await runTransaction(db, async (tx) => {
-    tx.set(doc(db, "usernames", username), {
-      uid: user.uid,
-      createdAt: serverTimestamp(),
+  try {
+    await runTransaction(db, async (tx) => {
+      tx.set(doc(db, "usernames", username), {
+        uid: user.uid,
+        createdAt: serverTimestamp(),
+      });
+      tx.set(doc(db, "users", user.uid), {
+        username,
+        displayName,
+        createdAt: serverTimestamp(),
+      });
     });
-    tx.set(doc(db, "users", user.uid), {
-      username,
-      displayName,
-      createdAt: serverTimestamp(),
-    });
-  });
+  } catch (err: unknown) {
+    const code = (err as { code?: string })?.code;
+    const message = (err as { message?: string })?.message ?? "";
+    console.error("[auth.register] firestore transaction error", code, message, err);
+    throw new AuthError(
+      "unknown",
+      `Cuenta creada pero no se pudo guardar el perfil. (${code ?? message ?? "desconocido"})`
+    );
+  }
 
   return user;
 }
