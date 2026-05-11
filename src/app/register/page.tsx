@@ -29,10 +29,14 @@ export default function RegisterPage() {
       await registerUser({ username, pin, displayName });
       router.replace("/album");
     } catch (err) {
+      console.error("[register page] error", err);
       if (err instanceof AuthError) {
         setError(err.message);
       } else {
-        setError("Algo salió mal. Intenta de nuevo.");
+        const e = err as { code?: string; message?: string; name?: string };
+        const code = e?.code ?? e?.name ?? "sin código";
+        const msg = e?.message ?? String(err);
+        setError(`Falló: ${code} — ${msg}`);
       }
       setLoading(false);
     }
@@ -46,6 +50,7 @@ export default function RegisterPage() {
         </Link>
 
         <h1 className="text-2xl font-bold mt-2">Crear tu cuenta</h1>
+        <p className="text-[10px] text-[var(--color-text-soft)] -mt-3">v2 · diag</p>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
           <div>
