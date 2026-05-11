@@ -50,7 +50,6 @@ export default function RegisterPage() {
         </Link>
 
         <h1 className="text-2xl font-bold mt-2">Crear tu cuenta</h1>
-        <p className="text-[10px] text-[var(--color-text-soft)] -mt-3">v2 · diag</p>
 
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
           <div>
